@@ -1,6 +1,5 @@
-from contextlib import nullcontext
-import streamlit as st
 import cv2
+import streamlit as st
 import numpy as np
 
 # Lista de kernels disponibles
