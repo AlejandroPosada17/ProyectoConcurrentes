@@ -1,3 +1,5 @@
+import os
+os.environ['PYOPENGL_PLATFORM'] = 'egl'
 import cv2
 from multiprocessing import Pool
 import numpy as np
