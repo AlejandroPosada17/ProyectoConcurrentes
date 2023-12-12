@@ -1,8 +1,4 @@
 import streamlit as st
-import numpy as np
-import cv2
-from multiprocessing import Pool
-
 from filtrados import Filtrados
 from kernels import Kernels
 
