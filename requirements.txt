@@ -2,3 +2,4 @@ streamlit
 opencv-python
 numpy
 google_images_search
+libGL
