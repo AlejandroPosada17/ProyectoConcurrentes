@@ -1,6 +1,6 @@
+import cv2
 from multiprocessing import Pool
 import numpy as np
-import cv2
 
 class Filtrados:
     def __init__(self, kernel,num_threads_or_processes):
