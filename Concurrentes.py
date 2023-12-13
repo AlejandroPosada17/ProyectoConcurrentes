@@ -1,11 +1,18 @@
 import streamlit as st
 from filtrados import Filtrados
 from kernels import Kernels
+from DescargaImagenes import Guardado_Imagenes
 from PIL import Image
+
+tema_Busqueda = st.text_input("Ingrese el tema para descargar las imagenes") 
 
 # Funciones
 def load_images():   
-    print("cargando las imagenes")
+    Guardado_Imagenes(tema_Busqueda)
+
+# Boton para descragar imagenes
+if st.button("Cargar imágenes"):
+    load_images()
 
 def apply_filter(kernel, option, num_threads_or_processes):
     misKernels = Kernels()
@@ -60,9 +67,6 @@ elif option == "PyCUDA":
 # Selección de kernel  
 kernel = st.selectbox("Seleccione el kernel", kernels)
         
-# Botones
-if st.button("Cargar imágenes"):
-    load_images()
-
+# Boton para filtrar imagenes
 if st.button("Filtrar imágenes"):
     filtered_images = apply_filter(kernel, option, num_threads_or_processes)
