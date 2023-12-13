@@ -2,3 +2,4 @@ streamlit
 opencv-python-headless
 numpy
 google_images_search
+mpi4py[openmpi]
