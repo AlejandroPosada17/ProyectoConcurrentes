@@ -3,6 +3,8 @@ from filtrados import Filtrados
 from kernels import Kernels
 from DescargaImagenes import Guardado_Imagenes
 from PIL import Image
+import os
+import random
 
 tema_Busqueda = st.text_input("Ingrese el tema para descargar las imagenes") 
 
@@ -16,7 +18,11 @@ if st.button("Cargar imágenes"):
 
 def apply_filter(kernel, option, num_threads_or_processes):
     misKernels = Kernels()
-    print("Aplicando filtros")
+    directorio = './Imagenes'
+        # Obtener la lista de archivos de imagen en el directorio
+    archivos_imagen = [f for f in os.listdir(directorio) if f.endswith(('jpg', 'png'))]
+        # Elegir 10 imágenes al azar si hay más de 10 disponibles
+    imagenes_seleccionadas = random.sample(archivos_imagen, min(3, len(archivos_imagen)))
     
     objetoMultipro = None
     if kernel == "El primero de los Class 1":
@@ -26,16 +32,40 @@ def apply_filter(kernel, option, num_threads_or_processes):
     
 
     if option == "Multiprocessing":
-        objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes)
-        objetoMultipro.multiprocessing()
+
+        # Proceso para cada imagen seleccionada
+        for imagen in imagenes_seleccionadas:
+            ruta_imagen = os.path.join(directorio, imagen)
+            
+            # Procesar la imagen (ejemplo: mostrar el tamaño de cada imagen)
+            img = Image.open(ruta_imagen)
+            ancho, alto = img.size
+            print(f"Imagen: {imagen} - Tamaño: {ancho}x{alto}")
+            
+            objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes,ruta_imagen)
+            objetoMultipro.multiprocessing()
+           
+        
+            # Cargar las imágenes
+            imagen_normal = Image.open(ruta_imagen)
+            imagen_filtrada = Image.open('imagen_filtrada.jpg')
+
+            # Mostrar las imágenes una al lado de la otra
+            col1, col2 = st.columns(2)
+            with col1:
+                st.image(imagen_normal, caption='Imagen Normal', use_column_width=True)
+
+            with col2:
+                st.image(imagen_filtrada, caption='Imagen Filtrada', use_column_width=True)
+
+            # Cerrar la imagen abierta
+            img.close()
     elif option == "MPI":
-        objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes)
+        objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes,)
         objetoMultipro.filtro4Py()
    
 
-    if objetoMultipro:
-        image = Image.open('imagen_filtrada.jpg')
-        st.image(image, caption='Nombre de la imagen', use_column_width=True)
+
 
 
 # Lista de kernels disponibles

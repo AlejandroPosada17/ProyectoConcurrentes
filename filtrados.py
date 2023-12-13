@@ -5,14 +5,15 @@ from mpi4py import MPI
 
 
 class Filtrados:
-    def __init__(self, kernel,num_threads_or_processes):
+    def __init__(self, kernel,num_threads_or_processes, rutaImg):
         self.kernel = kernel
         self.num_threads_or_processes = num_threads_or_processes
+        self.rutaImg = rutaImg
         
         
     def multiprocessing(self):
         # Cargar la imagen
-        image_path = 'messi.png'  # Reemplaza con la ruta de tu imagen
+        image_path = self.rutaImg  # Reemplaza con la ruta de tu imagen
         img = cv2.imread(image_path)
 
         # Verificar si la imagen se cargó correctamente
