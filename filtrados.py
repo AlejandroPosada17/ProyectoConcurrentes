@@ -2,6 +2,8 @@ import cv2
 from multiprocessing import Pool
 import numpy as np
 from mpi4py import MPI
+import os
+import uuid
 
 
 class Filtrados:
@@ -13,6 +15,7 @@ class Filtrados:
         
     def multiprocessing(self):
         # Cargar la imagen
+        print(self.rutaImg)
         image_path = self.rutaImg  # Reemplaza con la ruta de tu imagen
         img = cv2.imread(image_path)
 
@@ -29,8 +32,12 @@ class Filtrados:
             # Combinar los resultados en una sola imagen
             filtered_img = np.vstack(results)
 
+            #Nombre al azar para la imagen fultada
+            nombre_unico = str(uuid.uuid4()) + '.jpg'
+            ruta_guardado = os.path.join('ImagenesFiltradas', nombre_unico)
+
             # Descarga imagen filtrada
-            cv2.imwrite('imagen_filtrada.jpg', filtered_img)
+            cv2.imwrite(ruta_guardado, filtered_img)
             
             # Mostrar las dimensiones de la imagen filtrada
             print(f"Dimensiones de la imagen filtrada: {filtered_img.shape}")

@@ -22,19 +22,30 @@ def apply_filter(kernel, option, num_threads_or_processes):
         # Obtener la lista de archivos de imagen en el directorio
     archivos_imagen = [f for f in os.listdir(directorio) if f.endswith(('jpg', 'png'))]
         # Elegir 10 imágenes al azar si hay más de 10 disponibles
-    imagenes_seleccionadas = random.sample(archivos_imagen, min(3, len(archivos_imagen)))
     
     objetoMultipro = None
     if kernel == "El primero de los Class 1":
         kernel_to_use = misKernels.class1
+    elif kernel == "El primero de los Class 2":
+        kernel_to_use = misKernels.class2
+    elif kernel == "El primero de los Class 3":
+        kernel_to_use = misKernels.class3
     elif kernel == "Square 3x3":
         kernel_to_use = misKernels.square33
+    elif kernel == "El primero de los Edge 3x3":
+        kernel_to_use = misKernels.edge33
+    elif kernel == "Square 5x5":
+        kernel_to_use = misKernels.square55
+    elif kernel == "El primero de los Edge 5x5":
+        kernel_to_use = misKernels.square55
+        
+    
     
 
     if option == "Multiprocessing":
 
         # Proceso para cada imagen seleccionada
-        for imagen in imagenes_seleccionadas:
+        for imagen in archivos_imagen:
             ruta_imagen = os.path.join(directorio, imagen)
             
             # Procesar la imagen (ejemplo: mostrar el tamaño de cada imagen)
@@ -46,20 +57,18 @@ def apply_filter(kernel, option, num_threads_or_processes):
             objetoMultipro.multiprocessing()
            
         
-            # Cargar las imágenes
+           
+        
+        directorio = './ImagenesFiltradas'  
+        archivos_imagen = [f for f in os.listdir(directorio) if f.endswith(('jpg', 'png'))]
+        imagenes_seleccionadas = random.sample(archivos_imagen, min(5, len(archivos_imagen)))
+        for imagen in imagenes_seleccionadas:
+            ruta_imagen = os.path.join(directorio, imagen)
             imagen_normal = Image.open(ruta_imagen)
-            imagen_filtrada = Image.open('imagen_filtrada.jpg')
-
-            # Mostrar las imágenes una al lado de la otra
-            col1, col2 = st.columns(2)
-            with col1:
-                st.image(imagen_normal, caption='Imagen Normal', use_column_width=True)
-
-            with col2:
-                st.image(imagen_filtrada, caption='Imagen Filtrada', use_column_width=True)
-
-            # Cerrar la imagen abierta
-            img.close()
+            st.image(imagen_normal, caption='Imagen Normal', use_column_width=True)
+            
+            
+        
     elif option == "MPI":
         objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes,)
         objetoMultipro.filtro4Py()
@@ -69,19 +78,17 @@ def apply_filter(kernel, option, num_threads_or_processes):
 
 
 # Lista de kernels disponibles
-kernels = ["El primero de los Class 1", "Square 3x3", "Square 5x5", "Sobel X", "Sobel Y", "Laplacian"] 
+kernels = ["El primero de los Class 1", "El primero de los Class 2","El primero de los Class 3","Square 3x3","El primero de los Edge 3x3", "Square 5x5", "El primero de los Edge 5x5"] 
 
 # Opciones de frameworks/librerías
-options = ["C", "OpenMP", "Multiprocessing", "MPI", "PyCUDA"]
+options = ["OpenMP", "Multiprocessing", "MPI"]
 
 # Selección de framework/librería
 option = st.selectbox("Seleccione framework/librería", options)
 
-if option == "C":
-    # Opciones específicas para C
-    num_threads_or_processes = st.slider("Número de hilos", 1, 8, 1) 
 
-elif option == "OpenMP":
+
+if option == "OpenMP":
     num_threads_or_processes = st.slider("Número de hilos", 1, 8, 1)
 
 elif option == "Multiprocessing":
@@ -90,9 +97,6 @@ elif option == "Multiprocessing":
 elif option == "MPI":
     num_threads_or_processes = st.slider("Número de procesos", 1, 8, 1) 
 
-elif option == "PyCUDA":
-    num_blocks = st.slider("Número de bloques", 1, 64, 1)
-    threads_per_block = st.slider("Hilos por bloque", 1, 1024, 1)
 
 # Selección de kernel  
 kernel = st.selectbox("Seleccione el kernel", kernels)
