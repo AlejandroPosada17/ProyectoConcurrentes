@@ -2,3 +2,4 @@ streamlit
 opencv-python-headless
 numpy
 google_images_search
+pip install mpi4py -f https://pypi.python.org/simple
