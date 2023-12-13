@@ -1,6 +1,7 @@
 import streamlit as st
 from filtrados import Filtrados
 from kernels import Kernels
+from PIL import Image
 
 # Funciones
 def load_images():   
@@ -8,13 +9,27 @@ def load_images():
 
 def apply_filter(kernel, option, num_threads_or_processes):
     misKernels = Kernels()
-    print("aplicando filtros")
+    print("Aplicando filtros")
+    
+    objetoMultipro = None
+    if kernel == "El primero de los Class 1":
+        kernel_to_use = misKernels.class1
+    elif kernel == "Square 3x3":
+        kernel_to_use = misKernels.square33
+    
+
     if option == "Multiprocessing":
-        if kernel == "El primero de los Class 1":
-            print("El primero de los Class 1")
-            objetoMultipro = Filtrados(misKernels.class1,num_threads_or_processes) 
-            objetoMultipro.multiprocessing()
-            
+        objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes)
+        objetoMultipro.multiprocessing()
+    elif option == "MPI":
+        objetoMultipro = Filtrados(kernel_to_use, num_threads_or_processes)
+        objetoMultipro.filtro4Py()
+   
+
+    if objetoMultipro:
+        image = Image.open('imagen_filtrada.jpg')
+        st.image(image, caption='Nombre de la imagen', use_column_width=True)
+
 
 # Lista de kernels disponibles
 kernels = ["El primero de los Class 1", "Square 3x3", "Square 5x5", "Sobel X", "Sobel Y", "Laplacian"] 
