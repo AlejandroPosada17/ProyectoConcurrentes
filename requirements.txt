@@ -3,4 +3,3 @@ opencv-python-headless
 numpy
 google_images_search
 mpi4py -f https://pypi.python.org/simple
---upgrade pip
