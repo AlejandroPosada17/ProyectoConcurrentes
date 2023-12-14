@@ -39,25 +39,15 @@ class Filtrados:
             # Descarga imagen filtrada
             cv2.imwrite(ruta_guardado, filtered_img)
             
-            # Mostrar las dimensiones de la imagen filtrada
-            print(f"Dimensiones de la imagen filtrada: {filtered_img.shape}")
-
-            # Obtener valor mínimo, máximo, medio y desviación estándar de los píxeles
-            min_val = np.min(filtered_img)
-            max_val = np.max(filtered_img)
-            mean_val = np.mean(filtered_img)
-            std_dev = np.std(filtered_img)
-
-            print(f"Valor mínimo de los píxeles: {min_val}")
-            print(f"Valor máximo de los píxeles: {max_val}")
-            print(f"Valor medio de los píxeles: {mean_val}")
-            print(f"Desviación estándar de los píxeles: {std_dev}")
+           
         
         else:
             print("No se pudo cargar la imagen. Verifica la ruta y el formato de la imagen.")
     
     def apply_filter_kernel(self, img_section):
         print(self.num_threads_or_processes)
+        
+        #matriz de convolución que se aplicará a la sección de la imagen
         kernel = self.kernel
         
         filtered_section = cv2.filter2D(img_section, -1, kernel)
@@ -70,7 +60,7 @@ class Filtrados:
         size = comm.Get_size()
 
         # Cargar la imagen desde la web (reemplaza 'URL_de_tu_imagen.jpg' con la URL de tu imagen)
-        image_url = 'messi.png'
+        image_url = self.rutaImg
         image = cv2.imread(image_url)
 
         # Dividir la imagen en partes iguales entre los procesos
@@ -82,13 +72,7 @@ class Filtrados:
         local_image = image[start_row:end_row, :]
 
         # Definir el kernel
-        kernel = np.array([
-            [0, 0, 0, 0, 0],
-            [0, 0, 1, 0, 0],
-            [0, 0, -1, 0, 0],
-            [0, 0, 0, 0, 0],
-            [0, 0, 0, 0, 0]
-        ])
+        kernel = self.kernel
 
         # Convertir la porción de la imagen a escala de grises
         local_gray_image = cv2.cvtColor(local_image, cv2.COLOR_BGR2GRAY)
@@ -120,5 +104,9 @@ class Filtrados:
             print(f"Valor medio de píxeles: {mean_pixel_value}")
             print(f"Desviación estándar de píxeles: {std_dev_pixel_value}")
 
-            # Mostrar la imagen original y la imagen filtrada
-            cv2.imwrite('imagen_filtrada.jpg', filtered_image)
+            #Nombre al azar para la imagen fultada
+            nombre_unico = str(uuid.uuid4()) + '.jpg'
+            ruta_guardado = os.path.join('ImagenesFiltradas', nombre_unico)
+
+            # Descarga imagen filtrada
+            cv2.imwrite(ruta_guardado, filtered_image)

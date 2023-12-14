@@ -5,7 +5,7 @@ import os
 # Configuración
 API_KEY = 'AIzaSyCYHMA8aRyxidEBnb_2-IiIddcx8Eom5LI'
 CX = '65b4c74322300402a'
-TOTAL_IMAGES = 20
+TOTAL_IMAGES = 100
 THREAD_COUNT = 10
 
 # Semáforo para controlar la concurrencia
